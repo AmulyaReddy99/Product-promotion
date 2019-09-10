@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Email manager</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	</head>
+	<body>
+
+		{%	if session.get('email'): %}
+				<div class="alert alert-success" role="alert">
+					Registration successful!
+				</div>
+		{%	else: %}
+				<div class="alert alert-danger" role="alert">
+					Your Email is not verified..
+				</div>
+		{% endif %}
+			
+		<form method="POST" class="container" action="subscribe">
+			<div class="form-group row" style="margin:100px">
+				<div class="col-sm">
+					Email: <input type="email" name="email" class="form-control"><br>
+					<input type="text" name="option" required="True" class="form-control"><br>
+					<input type="submit" class="btn btn-primary">
+				</div>
+			</div>
+		</form>
+	
+	</body>
+</html>

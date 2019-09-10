@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin</title>
+	<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	</head>
+</head>
+<body>
+	<script type="text/javascript">
+		function login(){
+			document.getElementById('login_link').style.visibility = 'hidden';
+			document.getElementById('email_sec').innerHTML = "<input type='email' name='email' class='form-control'>";
+			document.getElementById('password_sec').innerHTML = "<input type='password' name='password' class='form-control'>";
+			document.getElementById('login_btn').style.display = 'block';
+		}
+
+
+		// function readSingleImage(evt) {
+		// 	var f = evt.target.files[0]; 
+
+		// 	if (f) {
+		// 		var r = new FileReader();
+		// 		r.onload = function(e) { 
+		// 			var contents = e.target.result;
+		// 			alert( "starts with: " + contents.substr(1, contents.indexOf("n")));  
+		// 		}
+		// 		r.readAsImage(f);
+		// 	} else { 
+		// 	  alert("Failed to load Image");
+		// 	}
+		// }
+
+	</script>
+	{%	if session.get('email'): %}
+		<div class="alert alert-success row" role="alert">
+			<div class="col-sm-6">Logged-in as Admin</div>
+			<div class="col-sm-6" align="right"><strong><a href="/logout" class="alert-link">Logout</a></strong></div>
+		</div>
+	{%	else: %}
+		<div class="alert alert-danger row" role="alert">
+			<div class="col-sm-3">Only admin has the access control</div>
+			<form action="login" class="col-sm-7" method="POST">
+				<div class="col-sm-6" id="email_sec"></div>
+				<div class="col-sm-6" id="password_sec"></div>
+				<div class="col-sm-6" align="right"><input type="submit" class="btn btn-submit col-sm-6" value="Login" id='login_btn'></div>
+				<script type="text/javascript">document.getElementById('login_btn').style.display = 'none';</script>
+			</form>
+			<div class="col-sm-1" align="right" id='login_link'>
+				<strong><a onclick="return login()">Login</a></strong>
+			</div>
+		</div>
+	{% endif %}
+	<div class="form-group row" style="margin:100px">
+		<div class="col-sm-8">
+			<form method="POST" action="insert">
+				<input type="text" name="title" class="form-control" placeholder="Title">
+				
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="FileAddon">Upload</span>
+					</div>
+					<div class="custom-file">
+						<input type="file" class="custom-file-input" id="File" name="image"
+					  aria-describedby="FileAddon">
+						<label class="custom-file-label" for="File">Choose file</label>
+					</div>
+				</div>
+
+				<select name='category_tag' class="form-control">
+				{%	for each in categories%}
+					<option>{{each}}</option>
+				{% endfor %}
+				</select>
+				
+				<input type="text" name="company" class="form-control" placeholder="Company">
+				<div class="form-group shadow-textarea">
+					<textarea class="form-control z-depth-1" name="body" rows="10" cols="150" placeholder="Write something here..."></textarea>
+				</div>
+				<input type="submit" class="btn btn-submit" value="Publish">
+			</form>
+		</div>
+		<div class="col-sm-4">
+			Oldest Publications to recycle
+		</div>
+	</div>
+
+	<form action="delete" method="POST">
+		
+	</form>
+
+	<div class="oldest">
+
+	</div>
+</body>
+</html>
