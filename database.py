@@ -67,7 +67,7 @@ except Exception as e:
 try:
 	fetch = '''SELECT id from categrories where category==category_id LIMIT 10'''
 	fetchall = cur.execute(fetch)
-	cur.execute('''INSERT INTO public.products(
+	cur.execute('''SELECT FROM public.products(
 		product_id SERIAL PRIMARY KEY,
 		category_id VARCHAR(255) NOT NULL,
 		prod_title VARCHAR(255) NOT NULL,
