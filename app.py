@@ -11,7 +11,7 @@ app = Flask(__name__)
 categories = ['Financial results', 'Management change updates', 'Insider Trading','Special situations', 'KPI', 'IPO', 'Stars shareholdings', 'Super growth stories', 'Community stories']
 
 @app.route('/admin')
-def index():
+def admin():
 	# SQL = 'SELECT image FROM Articles.articles'
 	# db.cur.execute(SQL)
 	# row = db.cur.fetchone()[0]
@@ -20,6 +20,15 @@ def index():
 	# 	f.write(file)
 	# return send_file('image.png', mimetype='image/png')
 	return render_template('admin.html',categories=categories)
+
+@app.route('/')
+def index():
+	SQL = 'SELECT product_id,category_id,prod_title,description,image,brand,price FROM products'
+	db.cur.execute(SQL)
+	products = db.cur.fetchall()
+	
+	return render_template('index.html',categories=categories,products=products)
+
 
 
 def validate(email,password):
@@ -52,10 +61,26 @@ def insert_article():
 	body = request.form['body']
 	image = request.form.get('image')
 	category_tag = request.form['category_tag']
-	company = request.form['company']
-	SQL = 'INSERT INTO Articles.articles (title,body,image,category_tag,company) VALUES (%s,%s,%s,%s,%s)'
+	
+	SQL = 'SELECT category_id FROM categories WHERE category=\''+category_tag+'\''
+	db.cur.execute(SQL)
+	category_id = db.cur.fetchone()
+	if category_id==None:
+		SQL = 'INSERT INTO categories (category) VALUES (\''+category_tag+'\')'
+		try:
+			db.cur.execute(SQL)
+			db.con.commit()
+		except Exception as e:
+			print("ERROR inserting in categories table:",e)
+		SQL = 'SELECT category_id FROM categories WHERE category=\''+category_tag+'\''
+		db.cur.execute(SQL)
+		category_id = db.cur.fetchone()
+
+	brand = request.form['company']
+	price = request.form['price']
+	SQL = 'INSERT INTO products (category_id,prod_title,description,image,brand,price) VALUES (%s,%s,%s,%s,%s,%s)'
 	try:
-		db.cur.execute(SQL,(title,body,image,category_tag,company))
+		db.cur.execute(SQL,(category_id,title,body,image,brand,price))
 		db.con.commit()
 	except Exception as e:
 		print('Failed insertion',e)
@@ -64,7 +89,7 @@ def insert_article():
 
 @app.route('/delete')
 def delete_article():
-	SQL = 'DELETE FROM TABLE article where ID=%d'
+	SQL = 'DELETE FROM TABLE products where product_id=%d'
 	db.cur.execute(SQL,request.form['article_id'])
 
 
