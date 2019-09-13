@@ -8,7 +8,7 @@ from flask import send_file
 sess = Session()
 app = Flask(__name__)
 
-categories = ['Financial results', 'Management change updates', 'Insider Trading','Special situations', 'KPI', 'IPO', 'Stars shareholdings', 'Super growth stories', 'Community stories']
+categories = ['Financial results','Community stories']
 
 @app.route('/admin')
 def admin():
